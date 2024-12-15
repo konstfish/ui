@@ -44,7 +44,7 @@ func (e *Element) AddChild(child *Element) *Element {
 }
 
 var tmpl = template.Must(template.New("element").Parse(`
-{{define "element"}}<{{.Tag}}{{if .Classes}} class="{{range $i, $class := .Classes}}{{if $i}} {{end}}{{$class}}{{end}}"{{end}}{{range $key, $value := .Attributes}} {{$key}}="{{$value}}"{{end}}>{{if .Content}}{{.Content}}{{end}}{{range .Children}}{{template "element" .}}{{end}}</{{.Tag}}>{{end}}
+{{define "element"}}<{{.Tag}}{{if .Classes}} class="{{range $i, $class := .Classes}}{{if $i}} {{end}}{{$class}}{{end}}"{{end}}{{range $key, $value := .Attributes}} {{$key}}="{{$value}}"{{end}}>{{range .Children}}{{template "element" .}}{{end}}{{if .Content}}{{.Content}}{{end}}</{{.Tag}}>{{end}}
 `))
 
 func (e *Element) Render() (string, error) {

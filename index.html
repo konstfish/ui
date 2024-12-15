@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>konstfish/ui</title>
+    <link rel="stylesheet" href="static/main.css">
+	<style>
+	fieldset {
+		margin: 20px;
+		padding: 20px;
+		border: 1px solid var(--bg-sec);
+		border-radius: var(--border-rad-main);
+        width: 100px;
+		height: 100px;
+        display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+    legend{
+        margin-bottom: -8%;
+    }
+	</style>
+</head>
+<body>
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+
+	<h1>konstfish/ui Gallery</h1>
+  <h2>Base</h2>
+  <div class="component-group">  <fieldset><legend>Panel</legend>
+        <div class="panel panel-adjust">Hello, world!</div>
+  </fieldset>
+  </div>
+  <h2>Extras</h2>
+  <div class="component-group">  <fieldset><legend>Spinner</legend>
+    <span hx-get="/Extras/Spinner" hx-swap="outerHTML" hx-trigger="load"></span>
+  </fieldset>
+  </div>
+</body>
+</html>

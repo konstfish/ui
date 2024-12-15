@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>:)</title>
+
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="panel panel-adjust">
+        <h1>components.konst.fish</h1>
+
+        <p>CSS I reuse a lot :)</p>
+    </div>
+
+    <hr>
+
+    <div class="panel panel-adjust">
+        <h1>Colors</h1>
+
+        <div class="panel-flex-container flex-nogap">
+            <div class="color-circle circle" style="background-color: var(--nord1);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord2);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord3);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord4);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord5);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord6);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord7);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord8);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord9);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord10);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord11);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord12);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord13);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord14);"></div>
+            <div class="color-circle circle" style="background-color: var(--nord15);"></div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="panel panel-adjust">
+        <h1>Default HTML Stuff</h1>
+    </div>
+
+    <div class="panel panel-adjust">
+        <h1>Header 1</h1>
+        <h2>Header 2</h2>
+        <h3>Header 3</h3>
+        <h4>Header 4</h4>
+        <h5>Header 5</h5>
+        <h6>Header 6</h6>
+    </div>
+
+    <div class="panel panel-adjust">
+        <h2>Links</h2>
+        <ul>
+            <li><a href="https://konst.fish">Link in accent color</a></li>
+            <li><a href="https://components.konst.fish" class="router-link-exact-active">Active link</a></li>
+        </ul>
+    </div>
+
+    <div class="panel panel-adjust">
+        <h2>Inputs</h2>
+        <button>Button!</button>
+
+        <br>
+
+        <label for="inputId">Text Input</label>
+        <input type="text" id="inputId" name="inputId" placeholder="Type here">
+
+        <br>
+
+        <label class="checkbox-label" for="showSolveTime">
+            <span>Show Solve time</span>
+            <input type="checkbox" class="checkbox" id="showSolveTime" v-model="showSolveTime">
+            <span class="switch"></span>
+        </label>
+    </div>
+
+    <hr>
+
+    <div class="panel panel-adjust">
+        <h1>Classes</h1>
+    </div>
+
+    <div class="panel panel-adjust">
+        <h2>Flex Default</h2>
+    </div>
+
+    <div class="panel-flex-container">
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+    </div>
+
+    <div class="panel panel-adjust">
+        <h2>Flex Wrap</h2>
+    </div>
+
+    <div class="panel-flex-container flex-wrap flex-between">
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+        <div class="panel"></div>
+    </div>
+
+    <hr>
+
+    <div class="panel panel-adjust">
+        <h1>todo</h1>
+    </div>
+
+    <div class="panel panel-adjust">
+        <span><span class="spinner"></span>&nbsp;Loading...</span>
+    </div>
+</body>
+</html>
