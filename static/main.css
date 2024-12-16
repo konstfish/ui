@@ -32,6 +32,7 @@
     --accent2: #b48ead;
 
     --padding: 6px;
+    --margin: 6px;
 
     --font-size: 16px;
     --font-size-sec: 12px;
@@ -75,7 +76,10 @@ body{
 
 p {
     margin: calc(var(--padding) / 2) 0;
+}
 
+p, span, div {
+    font-size: var(--font-size);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -211,20 +215,15 @@ input {
 /* panels */
 
 .panel {
-    width: 100px;
-    height: 100px;
-
     padding: var(--padding);
-    margin: var(--padding);
+    margin: var(--margin);
+
+    background-color: var(--bg-sec);
 
     border-radius: var(--border-rad-main);
     border: 1px solid var(--bg-thr);
 
-    background-color: var(--bg-sec);
-
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.1);
-
-    font-size: var(--font-size);
 }
 
 .circle {
@@ -275,6 +274,25 @@ input {
 .flex-wrap {
     flex-wrap: wrap;
     flex-grow: 1;
+}
+
+/* panel, fieldset */
+fieldset {
+    background-color: var(--bg-sec);
+
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--bg-sec);
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    border-radius: var(--border-rad-main);
+}
+
+legend{
+    margin-bottom: -8%; /* magic number type shit */
 }
 
 /* - etc */

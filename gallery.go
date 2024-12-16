@@ -6,13 +6,15 @@ import (
 	"net/http"
 	"reflect"
 
+	ui "github.com/konstfish/ui/core"
 	"github.com/konstfish/ui/themes/kf"
 )
 
 type ComponentInfo struct {
-	Name     string
-	Function interface{}
-	Args     []interface{}
+	Name           string
+	Function       interface{}
+	Args           []interface{}
+	PanelDimension string
 }
 
 type Server struct {
@@ -27,14 +29,16 @@ func NewServer(port string) *Server {
 	}
 }
 
-func (s *Server) RegisterComponent(group string, name string, fn interface{}, args ...interface{}) {
+func (s *Server) RegisterComponent(group string, name string, panelDimension string, fn interface{}, args ...interface{}) {
 	if s.components[group] == nil {
 		s.components[group] = make(map[string]ComponentInfo)
 	}
+
 	s.components[group][name] = ComponentInfo{
-		Name:     name,
-		Function: fn,
-		Args:     args,
+		Name:           name,
+		Function:       fn,
+		Args:           args,
+		PanelDimension: panelDimension,
 	}
 }
 
@@ -46,21 +50,20 @@ func (s *Server) generateHTML() string {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>konstfish/ui</title>
     <link rel="stylesheet" href="static/main.css">
+	<!-- gallery specifics -->
 	<style>
-	fieldset {
-		margin: 1rem;
-		padding: 1rem;
-		border: 1px solid var(--bg-sec);
-		display: grid;
-		align-items: center;
-		justify-content: center;
-		width: 100px;
-		height: 100px;
-		border-radius: var(--border-rad-main);
-	}
-    legend{
-        margin-bottom: -8%; /* magic number type shit */
-    }
+		.gallery-component-group {
+			display: flex;
+			flex-wrap: wrap;
+		}
+		.d1x1 {
+			width: 120px;
+			height: 120px;
+		}
+		.d1x2 {
+			width: calc(240px + var(--margin)*4 + 2px);
+			height: 120px;
+		}
 	</style>
 </head>
 <body>
@@ -70,14 +73,27 @@ func (s *Server) generateHTML() string {
 `
 
 	for group := range s.components {
-		html += fmt.Sprintf("  <h2>%s</h2>\n", group)
-		html += "  <div class=\"component-group\">"
+		head, _ := ui.NewElement("h2").SetContent(group).Render()
+		html += head
+
+		componentGroup := ui.NewElement("div").AddClass("gallery-component-group")
 		for name := range s.components[group] {
-			html += fmt.Sprintf("  <fieldset><legend>%s</legend>\n", name)
-			html += fmt.Sprintf("    <span hx-get=\"/%s/%s\" hx-swap=\"outerHTML\" hx-trigger=\"load\"></span>\n", group, name)
-			html += "  </fieldset>\n"
+			componentGroup.AddChild(
+				ui.NewElement("fieldset").
+					AddClass("panel").
+					AddClass(s.components[group][name].PanelDimension).
+					SetAttribute("id", fmt.Sprintf("%s-%s", group, name)).
+					AddChild(ui.NewElement("legend").
+						SetContent(name)).
+					AddChild(ui.NewElement("span").
+						SetAttribute("hx-get", fmt.Sprintf("/%s/%s", group, name)).
+						SetAttribute("hx-swap", "outerHTML").
+						SetAttribute("hx-trigger", "load")),
+			)
 		}
-		html += "  </div>\n"
+
+		componentGroupOut, _ := componentGroup.Render()
+		html += componentGroupOut
 	}
 
 	html += "</body>\n</html>"
@@ -95,12 +111,13 @@ func (s *Server) handleComponent(info ComponentInfo) http.HandlerFunc {
 
 		results := fn.Call(args)
 
-		if len(results) == 2 && !results[1].IsNil() {
-			http.Error(w, results[1].Interface().(error).Error(), http.StatusInternalServerError)
+		out, err := results[0].Interface().(*ui.Element).Render()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		fmt.Fprintf(w, results[0].String())
+		fmt.Fprintf(w, out)
 	}
 }
 
@@ -129,9 +146,14 @@ func (s *Server) Start() error {
 
 func main() {
 	server := NewServer(":8080")
-	server.RegisterComponent("Base", "Panel", kf.Panel, "Hello, world!")
+	server.RegisterComponent("Base", "Text", "d1x1", kf.Text, "Hello, world!")
+	server.RegisterComponent("Base", "Link", "d1x1", kf.Link, "konstfish/ui", "https://github.com/konstfish/ui")
+	server.RegisterComponent("Base", "Panel", "d1x1", kf.Panel, kf.Text("Panel content!"))
 
-	server.RegisterComponent("Extras", "Spinner", kf.Spinner, "Loading...")
+	server.RegisterComponent("Inputs", "Button", "d1x1", kf.Button, "Click me!")
+
+	server.RegisterComponent("Extras", "Spinner", "d1x1", kf.Spinner, "Loading...")
+	server.RegisterComponent("Extras", "Fieldset", "d1x2", kf.Fieldset, "Fieldset", kf.Text("Span in fieldset!"))
 
 	if err := server.Start(); err != nil {
 		log.Fatal(err)
