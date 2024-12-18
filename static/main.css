@@ -31,14 +31,14 @@
     --accent1: #a3be8c;
     --accent2: #b48ead;
 
-    --padding: 6px;
-    --margin: 6px;
+    --padding: 4px;
+    --margin: 4px;
 
     --font-size: 16px;
     --font-size-sec: 12px;
 
-    --border-rad-main: 6px;
-    --border-rad-sec: 6px;
+    --outer-radius: 16px;
+    --inner-radius: calc(var(--outer-radius) - (var(--padding) + var(--margin)));
 }
 
 @media (prefers-color-scheme: light) {
@@ -88,7 +88,7 @@ h1, h2, h3, h4, h5, h6 {
 
 hr {
     border: 1px solid var(--bg-sec);
-    border-radius: var(--border-rad-main);
+    border-radius: var(--outer-radius);
 
     margin: var(--padding);
 }
@@ -124,8 +124,8 @@ a.router-link-exact-active {
 
 /* - button */
 button {
-    padding: calc(var(--padding) * 1.2);
-    border-radius: var(--border-rad-main);
+    padding: calc(var(--padding) * 2);
+    border-radius: var(--inner-radius);
     border: 1px solid var(--bg-thr);
     background-color: var(--bg-sec);
 
@@ -137,7 +137,7 @@ input {
     padding: var(--padding);
     margin: var(--padding);
 
-    border-radius: var(--border-rad-main);
+    border-radius: var(--outer-radius);
     border: 1px solid var(--bg-thr);
     background-color: var(--bg-sec);
 }
@@ -220,10 +220,15 @@ input {
 
     background-color: var(--bg-sec);
 
-    border-radius: var(--border-rad-main);
+    border-radius: var(--outer-radius);
     border: 1px solid var(--bg-thr);
 
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.07), 0 6px 10px 0 rgba(0, 0, 0, 0.05);
+}
+
+.panel-inactive {
+    background-color: var(--bg-main);
+    border: 1px solid var(--bg-sec);
 }
 
 .circle {
@@ -288,11 +293,12 @@ fieldset {
     justify-content: center;
     width: 100px;
     height: 100px;
-    border-radius: var(--border-rad-main);
+    border-radius: var(--outer-radius);
 }
 
 legend{
-    margin-bottom: -8%; /* magic number type shit */
+    margin-bottom: calc(-1*var(--font-size)/2);
+    margin-left: var(--margin);
 }
 
 /* - etc */
@@ -311,4 +317,13 @@ legend{
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* - modifiers */
+.disable-box-shadow {
+    box-shadow: none;
+}
+
+.inner-radius, fieldset > fieldset, .panel > .panel {
+    border-radius: var(--inner-radius);
 }
