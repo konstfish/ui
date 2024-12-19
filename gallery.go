@@ -50,6 +50,7 @@ func (s *Server) generateHTML() string {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>konstfish/ui</title>
     <link rel="stylesheet" href="static/main.css">
+	<link rel="icon" type="image/svg+xml" href="static/logo.svg">
 	<!-- gallery specifics -->
 	<style>
 		.gallery-component-group {

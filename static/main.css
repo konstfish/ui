@@ -28,16 +28,18 @@
     --text-sec: var(--nord5);
     --text-thr: var(--nord6);
 
-    --accent1: #a3be8c;
-    --accent2: #b48ead;
+    --accent1: var(--nord14);
+    --accent2: var(--nord15);
 
-    --padding: 4px;
-    --margin: 4px;
+    font-size: 16px;
+    --font-size: 1rem;
+    --font-size-sec: 0.75rem;
 
-    --font-size: 16px;
-    --font-size-sec: 12px;
+    --padding: 0.25rem;
+    --margin: 0.25rem;  
+    --border: 1px;
 
-    --outer-radius: 16px;
+    --outer-radius: 1rem;
     --inner-radius: calc(var(--outer-radius) - (var(--padding) + var(--margin)));
 }
 
@@ -320,7 +322,7 @@ legend{
 }
 
 /* - modifiers */
-.disable-box-shadow {
+.disable-box-shadow, fieldset > fieldset, .panel > .panel {
     box-shadow: none;
 }
 
