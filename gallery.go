@@ -1,7 +1,9 @@
 package main
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
 	"log"
 	"net/http"
 	"reflect"
@@ -69,9 +71,10 @@ func (s *Server) generateHTML() string {
 </head>
 <body>
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-
-	<h1>konstfish/ui Gallery</h1>
 `
+
+	head, _ := ui.NewElement("h1").SetContent("konstfish/ui Gallery Smile :)").Render()
+	html += head
 
 	for group := range s.components {
 		head, _ := ui.NewElement("h2").SetContent(group).Render()
@@ -122,8 +125,16 @@ func (s *Server) handleComponent(info ComponentInfo) http.HandlerFunc {
 	}
 }
 
+//go:embed static/*
+var staticFiles embed.FS
+
 func (s *Server) Start() error {
-	fileServer := http.FileServer(http.Dir("./static"))
+	staticFS, err := fs.Sub(staticFiles, "static")
+	if err != nil {
+		panic(err)
+	}
+
+	fileServer := http.FileServer(http.FS(staticFS))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

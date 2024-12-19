@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ui-konst-fish
+  namespace: konstfish-ui
+spec:
+  secretName: ui-konst-fish
+  issuerRef:
+    name: letsencrypt-dns
+    kind: ClusterIssuer
+  commonName: "ui.konst.fish"
+  dnsNames:
+  - "ui.konst.fish"
