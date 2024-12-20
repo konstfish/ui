@@ -20,87 +20,61 @@ type ComponentInfo struct {
 }
 
 type Server struct {
-	components map[string]map[string]ComponentInfo
-	port       string
+	componentOrder []string
+	components     map[string]ComponentInfo
+	port           string
 }
 
 func NewServer(port string) *Server {
 	return &Server{
-		components: make(map[string]map[string]ComponentInfo),
+		components: make(map[string]ComponentInfo),
 		port:       port,
 	}
 }
 
-func (s *Server) RegisterComponent(group string, name string, panelDimension string, fn interface{}, args ...interface{}) {
-	if s.components[group] == nil {
-		s.components[group] = make(map[string]ComponentInfo)
-	}
-
-	s.components[group][name] = ComponentInfo{
+func (s *Server) RegisterComponent(name string, panelDimension string, fn interface{}, args ...interface{}) {
+	s.components[name] = ComponentInfo{
 		Name:           name,
 		Function:       fn,
 		Args:           args,
 		PanelDimension: panelDimension,
 	}
+
+	s.componentOrder = append(s.componentOrder, name)
 }
 
 func (s *Server) generateHTML() string {
-	html := `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>konstfish/ui</title>
-    <link rel="stylesheet" href="static/main.css">
-	<link rel="icon" type="image/svg+xml" href="static/logo.svg">
-	<!-- gallery specifics -->
-	<style>
-		.gallery-component-group {
-			display: flex;
-			flex-wrap: wrap;
-		}
-		.d1x1 {
-			width: 120px;
-			height: 120px;
-		}
-		.d1x2 {
-			width: calc(240px + var(--margin)*4 + 2px);
-			height: 120px;
-		}
-	</style>
-</head>
-<body>
-    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-`
+	page := ui.NewPage().
+		SetTitle("konstfish/ui Gallery").
+		AddStyleSheet("static/main.css").
+		AddStyleSheet("static/gallery/etc.css").
+		AddLinkWithType("image/svg+xml", "static/logo.svg", "icon").
+		AddScript("https://unpkg.com/htmx.org@2.0.4")
 
-	head, _ := ui.NewElement("h1").SetContent("konstfish/ui Gallery Smile :)").Render()
-	html += head
+	page.Body.AddChild(ui.NewElement("h1").SetContent("konstfish/ui Gallery"))
 
-	for group := range s.components {
-		head, _ := ui.NewElement("h2").SetContent(group).Render()
-		html += head
-
-		componentGroup := ui.NewElement("div").AddClass("gallery-component-group")
-		for name := range s.components[group] {
-			componentGroup.AddChild(
-				ui.NewElement("fieldset").
-					AddClass("panel").
-					AddClass(s.components[group][name].PanelDimension).
-					SetAttribute("id", fmt.Sprintf("%s-%s", group, name)).
-					AddChild(ui.NewElement("legend").
-						SetContent(name)).
-					AddChild(ui.NewElement("span").
-						SetAttribute("hx-get", fmt.Sprintf("/%s/%s", group, name)).
-						SetAttribute("hx-swap", "outerHTML").
-						SetAttribute("hx-trigger", "load")),
-			)
-		}
-
-		componentGroupOut, _ := componentGroup.Render()
-		html += componentGroupOut
+	componentGroup := ui.NewElement("div").AddClass("gallery-component-group")
+	for _, name := range s.componentOrder {
+		componentGroup.AddChild(
+			ui.NewElement("fieldset").
+				AddClass("panel").
+				AddClass(s.components[name].PanelDimension).
+				SetAttribute("id", fmt.Sprintf("comp-%s", name)).
+				AddChild(ui.NewElement("span").
+					SetAttribute("hx-get", fmt.Sprintf("/%s", name)).
+					SetAttribute("hx-swap", "outerHTML").
+					SetAttribute("hx-trigger", "load")),
+		)
 	}
 
-	html += "</body>\n</html>"
+	page.Body.AddChild(componentGroup)
+
+	html, err := page.Render()
+	if err != nil {
+		log.Fatal(err)
+		return "whoops"
+	}
+
 	return html
 }
 
@@ -146,10 +120,8 @@ func (s *Server) Start() error {
 		http.NotFound(w, r)
 	})
 
-	for group, components := range s.components {
-		for _, info := range components {
-			http.HandleFunc("/"+group+"/"+info.Name, s.handleComponent(info))
-		}
+	for _, info := range s.components {
+		http.HandleFunc(fmt.Sprintf("/%s", info.Name), s.handleComponent(info))
 	}
 
 	fmt.Printf("Server starting on port %s\n", s.port)
@@ -158,14 +130,14 @@ func (s *Server) Start() error {
 
 func main() {
 	server := NewServer(":8080")
-	server.RegisterComponent("Base", "Text", "d1x1", kf.Text, "Hello, world!")
-	server.RegisterComponent("Base", "Link", "d1x1", kf.Link, "konstfish/ui", "https://github.com/konstfish/ui")
-	server.RegisterComponent("Base", "Panel", "d1x1", kf.Panel, kf.Text("Panel content!"))
+	server.RegisterComponent("Text", "d1x1", kf.Text, "Hello, world!")
+	server.RegisterComponent("Link", "d1x1", kf.Link, "Links", "https://github.com/konstfish/ui")
+	server.RegisterComponent("Panel", "d1x1", kf.Panel, kf.Text("Panels"))
 
-	server.RegisterComponent("Inputs", "Button", "d1x1", kf.Button, "Click me!")
+	server.RegisterComponent("Button", "d1x1", kf.Group, kf.Button("Button"), kf.Button("Button 2"))
 
-	server.RegisterComponent("Extras", "Spinner", "d1x1", kf.Spinner, "Loading...")
-	server.RegisterComponent("Extras", "Fieldset", "d1x2", kf.Fieldset, "Fieldset", kf.Text("Span in fieldset!"))
+	server.RegisterComponent("Spinner", "d1x1", kf.Spinner, "Loading...")
+	server.RegisterComponent("Fieldset", "d1x2", kf.Fieldset, "Fieldset", kf.Text("Span in fieldset!"))
 
 	if err := server.Start(); err != nil {
 		log.Fatal(err)

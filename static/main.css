@@ -113,7 +113,8 @@ a:hover {
 }
 
 a:visited {
-    color: var(--accent2);
+    color: var(--accent1);
+    opacity: 0.8;
 }
 
 

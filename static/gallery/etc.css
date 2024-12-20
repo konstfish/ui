@@ -1,0 +1,18 @@
+.gallery-component-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    
+}
+.gallery-component-group fieldset {
+    flex-grow: 1;
+    min-width: 200px;
+}
+.d1x1 {
+    width: 120px;
+    height: 120px;
+}
+.d1x2 {
+    width: calc(240px + var(--margin)*4 + 2px);
+    height: 120px;
+}

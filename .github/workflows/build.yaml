@@ -30,6 +30,7 @@ jobs:
       run: go test -v -cover ./...
 
   build-and-push:
+    name: Build & Push
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest

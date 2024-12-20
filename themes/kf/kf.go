@@ -2,6 +2,16 @@ package kf
 
 import ui "github.com/konstfish/ui/core"
 
+func Group(content ...*ui.Element) *ui.Element {
+	panel := ui.NewElement("div")
+
+	for _, c := range content {
+		panel.AddChild(c)
+	}
+
+	return panel
+}
+
 func Panel(content *ui.Element) *ui.Element {
 	panel := ui.NewElement("div").
 		AddClass("panel").
