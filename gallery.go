@@ -46,10 +46,10 @@ func (s *Server) RegisterComponent(name string, panelDimension string, fn interf
 func (s *Server) generateHTML() string {
 	page := ui.NewPage().
 		SetTitle("konstfish/ui Gallery").
+		AddScript("https://unpkg.com/htmx.org@2.0.4").
 		AddStyleSheet("static/main.css").
 		AddStyleSheet("static/gallery/etc.css").
-		AddLinkWithType("image/svg+xml", "static/logo.svg", "icon").
-		AddScript("https://unpkg.com/htmx.org@2.0.4")
+		AddLinkWithType("icon", "static/logo.svg", "image/svg+xml")
 
 	page.Body.AddChild(ui.NewElement("h1").SetContent("konstfish/ui Gallery"))
 
@@ -60,10 +60,7 @@ func (s *Server) generateHTML() string {
 				AddClass("panel").
 				AddClass(s.components[name].PanelDimension).
 				SetAttribute("id", fmt.Sprintf("comp-%s", name)).
-				AddChild(ui.NewElement("span").
-					SetAttribute("hx-get", fmt.Sprintf("/%s", name)).
-					SetAttribute("hx-swap", "outerHTML").
-					SetAttribute("hx-trigger", "load")),
+				AddChild(kf.Placeholder(fmt.Sprintf("/%s", name))),
 		)
 	}
 
