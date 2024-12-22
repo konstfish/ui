@@ -12,6 +12,16 @@ func Group(content ...*ui.Element) *ui.Element {
 	return panel
 }
 
+func GroupClass(class string, content ...*ui.Element) *ui.Element {
+	panel := ui.NewElement("div").AddClass(class)
+
+	for _, c := range content {
+		panel.AddChild(c)
+	}
+
+	return panel
+}
+
 func Panel(content *ui.Element) *ui.Element {
 	panel := ui.NewElement("div").
 		AddClass("panel").
@@ -33,10 +43,6 @@ func Link(text string, url string) *ui.Element {
 	return link
 }
 
-func Button(text string) *ui.Element {
-	return ui.NewElement("button").SetContent(text)
-}
-
 func Fieldset(legend string, content *ui.Element) *ui.Element {
 	fieldset := ui.NewElement("fieldset").
 		AddClass("panel").
@@ -45,16 +51,4 @@ func Fieldset(legend string, content *ui.Element) *ui.Element {
 		AddChild(content)
 
 	return fieldset
-}
-
-func Spinner(text string) *ui.Element {
-	spinner := ui.NewElement("span")
-
-	spinner.AddChild(ui.NewElement("span").AddClass("spinner"))
-
-	if text != "" {
-		spinner.SetContent(" " + text)
-	}
-
-	return spinner
 }

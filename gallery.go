@@ -51,13 +51,18 @@ func (s *Server) generateHTML() string {
 		AddStyleSheet("static/gallery/etc.css").
 		AddLinkWithType("icon", "static/logo.svg", "image/svg+xml")
 
-	page.Body.AddChild(ui.NewElement("h1").SetContent("konstfish/ui Gallery"))
+	page.Body.AddChild(ui.NewElement("h1").SetContent("konstfish/ui Gallery").AddChild(ui.NewElement("img").SetAttribute("src", "static/logo.svg").AddClass("logo").AddClass("icon")))
+
+	/*page.Body.AddChild(
+		kf.GroupClass("gallery-header", kf.ButtonIcon("Source", "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg").SetAttribute("onclick", "location.href='http://github.com/konstfish/ui'")),
+	)*/
 
 	componentGroup := ui.NewElement("div").AddClass("gallery-component-group")
 	for _, name := range s.componentOrder {
 		componentGroup.AddChild(
 			ui.NewElement("fieldset").
 				AddClass("panel").
+				AddClass("gallery-component").
 				AddClass(s.components[name].PanelDimension).
 				SetAttribute("id", fmt.Sprintf("comp-%s", name)).
 				AddChild(kf.Placeholder(fmt.Sprintf("/%s", name))),
@@ -131,7 +136,9 @@ func main() {
 	server.RegisterComponent("Link", "d1x1", kf.Link, "Links", "https://github.com/konstfish/ui")
 	server.RegisterComponent("Panel", "d1x1", kf.Panel, kf.Text("Panels"))
 
-	server.RegisterComponent("Button", "d1x1", kf.Group, kf.Button("Button"), kf.Button("Button 2"))
+	server.RegisterComponent("Button", "d1x1", kf.GroupClass, "button-display", kf.Button("Button"), kf.ButtonDanger("Button Danger"))
+	server.RegisterComponent("Input", "d1x1", kf.Input, "Placeholder")
+	server.RegisterComponent("Dropdown", "d1x1", kf.Dropdown, []string{"Option 1", "Option 2", "Option 3"})
 
 	server.RegisterComponent("Spinner", "d1x1", kf.Spinner, "Loading...")
 	server.RegisterComponent("Fieldset", "d1x2", kf.Fieldset, "Fieldset", kf.Text("Span in fieldset!"))
