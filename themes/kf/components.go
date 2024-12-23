@@ -62,13 +62,14 @@ func Title(text string) *ui.Element {
 }
 
 func TitleLogo(text string, logoSrc string) *ui.Element {
-	return ui.NewElement("header-text").
+	return ui.NewElement("div").
+		AddClass("header-title").
 		SetContent(text).
 		AddChild(ui.NewElement("img").SetAttribute("src", logoSrc).AddClass("icon"))
 }
 
 func Header(logo *ui.Element, links []KeyValue) *ui.Element {
-	var headerElement *ui.Element = ui.NewElement("header").AddChild(logo)
+	var headerContent *ui.Element = ui.NewElement("div").AddClass("content").AddChild(logo)
 
 	var linksElement *ui.Element
 	if links != nil {
@@ -77,10 +78,18 @@ func Header(logo *ui.Element, links []KeyValue) *ui.Element {
 			linksElement.AddChild(Link(kv.Key, kv.Value))
 		}
 
-		headerElement.AddChild(linksElement)
+		headerContent.AddChild(linksElement)
 	}
 
-	return headerElement
+	return ui.NewElement("header").AddChild(headerContent)
+}
+
+func AppBody() *ui.Element {
+	return ui.NewElement("div").AddId("app")
+}
+
+func FooterSimple(content string) *ui.Element {
+	return ui.NewElement("footer").AddChild(Text(":)"))
 }
 
 func SeparatorBar() *ui.Element {

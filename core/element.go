@@ -9,6 +9,7 @@ import (
 type Element struct {
 	Tag        string
 	Classes    []string
+	Ids        []string
 	Attributes map[string]string
 	Content    interface{}
 	Children   []*Element
@@ -28,6 +29,11 @@ func (e *Element) AddClass(class string) *Element {
 	return e
 }
 
+func (e *Element) AddId(id string) *Element {
+	e.Ids = append(e.Ids, id)
+	return e
+}
+
 func (e *Element) SetAttribute(key, value string) *Element {
 	e.Attributes[key] = value
 	return e
@@ -44,7 +50,7 @@ func (e *Element) AddChild(child *Element) *Element {
 }
 
 var TemplateElement = template.Must(template.New("element").Parse(`
-{{define "element"}}<{{.Tag}}{{if .Classes}} class="{{range $i, $class := .Classes}}{{if $i}} {{end}}{{$class}}{{end}}"{{end}}{{range $key, $value := .Attributes}} {{$key}}="{{$value}}"{{end}}>{{range .Children}}{{template "element" .}}{{end}}{{if .Content}}{{.Content}}{{end}}</{{.Tag}}>{{end}}
+{{define "element"}}<{{.Tag}}{{if .Classes}} class="{{range $i, $class := .Classes}}{{if $i}} {{end}}{{$class}}{{end}}"{{end}}{{if .Ids}} id="{{range $i, $id := .Ids}}{{if $i}} {{end}}{{$id}}{{end}}"{{end}}{{range $key, $value := .Attributes}} {{$key}}="{{$value}}"{{end}}>{{range .Children}}{{template "element" .}}{{end}}{{if .Content}}{{.Content}}{{end}}</{{.Tag}}>{{end}}
 `))
 
 func (e *Element) Render() (string, error) {

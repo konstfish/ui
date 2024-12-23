@@ -44,6 +44,8 @@
 
     --border-full: 1px solid var(--bg-sec);
     --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.07), 0 6px 10px 0 rgba(0, 0, 0, 0.05);
+
+    --content-width: 90%;
 }
 
 @media (prefers-color-scheme: light) {
@@ -55,6 +57,12 @@
         --text-main: var(--nord0);
         --text-sec: var(--nord1);
         --text-thr: var(--nord2);
+    }
+}
+
+@media (max-width: 768px) {
+    :root{
+        --content-width: 70%;
     }
 }
 
@@ -75,8 +83,9 @@ html, body{
 }
 
 body{
-    padding: calc(var(--padding) * 2);
+    padding: 0;
     margin: 0;
+    width: 100vw;
 }
 
 p {
@@ -353,11 +362,11 @@ legend{
 }
 
 /* - modifiers */
-.disable-box-shadow, fieldset > fieldset, .panel > .panel {
+.disable-box-shadow, fieldset fieldset, .panel .panel {
     box-shadow: none;
 }
 
-.inner-radius, fieldset > fieldset, .panel > .panel {
+.inner-radius, fieldset fieldset, .panel .panel {
     border-radius: var(--inner-radius);
 }
 
@@ -372,30 +381,57 @@ legend{
 
 /* - header */
 header {
+    margin: var(--margin) 0 var(--margin) 0;
+
+    border-bottom: var(--border-full);
+    box-shadow: var(--box-shadow);
+
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+}
+
+header > .content {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
 
-    padding: var(--padding) var(--padding) calc(var(--padding) * 2) var(--padding);
-    margin: 0 0 calc(var(--padding) * 4) 0;
-
-    width: calc(100vw - 2 * var(--padding));
-
-    border-bottom: var(--border-full);
-    box-shadow: var(--box-shadow);
+    padding: calc(var(--padding) * 2);
+    width: 95%;
 }
 
-header > .header-text > .icon {
-    height: calc(var(--font-size) * 2);
+header .header-title > .icon {
+    height: var(--font-size);
     margin-right: var(--margin);
     margin-bottom: 2px;
 }
 
-header > nav {
+header nav {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
 
-    gap: var(--padding);
+    gap: calc(var(--padding) * 2);
+}
+
+/* - app */
+#app {
+    padding: calc(var(--padding) * 2);
+    width: var(--content-width);
+}
+
+/* - footer */
+footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    /* todo: resolve this with content div */
+    width: calc(100vw - 2*var(--padding));
+
+    padding: var(--padding);
+    margin: var(--margin) 0 var(--margin) 0;
 }

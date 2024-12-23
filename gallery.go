@@ -49,12 +49,12 @@ func (s *Server) generateHTML() string {
 		AddScript("https://unpkg.com/htmx.org@2.0.4").
 		AddScript("https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js").
 		AddScript("https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js").
+		AddScript("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js").
+		AddScript("static/gallery/flip.js").
 		AddStyleSheet("static/main.css").
 		AddStyleSheet("static/prism.css").
 		AddStyleSheet("static/gallery/etc.css").
 		AddLinkWithType("icon", "static/logo.svg", "image/svg+xml")
-
-	// page.Body.AddChild(ui.NewElement("h1").SetContent("konstfish/ui Gallery").AddChild(ui.NewElement("img").SetAttribute("src", "static/logo.svg").AddClass("logo").AddClass("icon")))
 
 	page.Body.AddChild(kf.Header(kf.TitleLogo("konstfish/ui Gallery", "static/logo.svg"), []kf.KeyValue{{"Source", "https://github.com/konstfish/ui"}, {"Docs", "https://pkg.go.dev/github.com/konstfish/ui/core"}}))
 
@@ -75,7 +75,9 @@ func (s *Server) generateHTML() string {
 		)
 	}
 
-	page.Body.AddChild(componentGroup)
+	page.Body.AddChild(kf.AppBody().AddChild(componentGroup))
+
+	page.Body.AddChild(kf.FooterSimple(":)"))
 
 	html, err := page.Render()
 	if err != nil {
@@ -139,15 +141,15 @@ func (s *Server) Start() error {
 func main() {
 	server := NewServer(":8080")
 	server.RegisterComponent("Text", "kf.Text(\"Hello, world!\")", kf.Text, "Hello, world!")
-	server.RegisterComponent("Link", "d1x1", kf.Link, "Links", "https://github.com/konstfish/ui")
-	server.RegisterComponent("Panel", "d1x1", kf.Panel, kf.Text("Panels"))
+	server.RegisterComponent("Link", "kf.Link(\n  \"Links\",\n  \"https://github.com/konstfish/ui\")", kf.Link, "Links", "https://github.com/konstfish/ui")
+	server.RegisterComponent("Panel", "kf.Panel(kf.Text(\"Panels\"))", kf.Panel, kf.Text("Panels"))
 
-	server.RegisterComponent("Button", "d1x1", kf.GroupClass, "button-display", kf.Button("Button"), kf.ButtonDanger("Button Danger"))
-	server.RegisterComponent("Input", "d1x1", kf.Input, "Placeholder")
-	server.RegisterComponent("Dropdown", "d1x1", kf.Dropdown, []string{"Option 1", "Option 2", "Option 3"})
+	server.RegisterComponent("Button", "kf.GroupClass(\"button-display\",\n  kf.Button(\"Button\"),\n  kf.ButtonDanger(\"Button Danger\"))", kf.GroupClass, "button-display", kf.Button("Button"), kf.ButtonDanger("Button Danger"))
+	server.RegisterComponent("Input", "kf.Input(\"Placeholder\")", kf.Input, "Placeholder")
+	server.RegisterComponent("Dropdown", "kf.Dropdown([]string{\"Option 1\",\n  \"Option 2\",\n  \"Option 3\"})", kf.Dropdown, []string{"Option 1", "Option 2", "Option 3"})
 
-	server.RegisterComponent("Spinner", "d1x1", kf.Spinner, "Loading...")
-	server.RegisterComponent("Fieldset", "d1x2", kf.Fieldset, "Fieldset", kf.Text("Span in fieldset!"))
+	server.RegisterComponent("Spinner", "kf.Spinner(\"Loading...\")", kf.Spinner, "Loading...")
+	server.RegisterComponent("Fieldset", "kf.Fieldset(\n  \"Fieldset\",\n  kf.Text(\"Fieldset Content\"))", kf.Fieldset, "Fieldset", kf.Text("Fieldset Content"))
 
 	if err := server.Start(); err != nil {
 		log.Fatal(err)
