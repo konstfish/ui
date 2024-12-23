@@ -14,9 +14,9 @@ import (
 
 type ComponentInfo struct {
 	Name           string
+	FunctionString string
 	Function       interface{}
 	Args           []interface{}
-	PanelDimension string
 }
 
 type Server struct {
@@ -32,12 +32,12 @@ func NewServer(port string) *Server {
 	}
 }
 
-func (s *Server) RegisterComponent(name string, panelDimension string, fn interface{}, args ...interface{}) {
+func (s *Server) RegisterComponent(name string, functionString string, fn interface{}, args ...interface{}) {
 	s.components[name] = ComponentInfo{
 		Name:           name,
 		Function:       fn,
+		FunctionString: functionString,
 		Args:           args,
-		PanelDimension: panelDimension,
 	}
 
 	s.componentOrder = append(s.componentOrder, name)
@@ -47,11 +47,16 @@ func (s *Server) generateHTML() string {
 	page := ui.NewPage().
 		SetTitle("konstfish/ui Gallery").
 		AddScript("https://unpkg.com/htmx.org@2.0.4").
+		AddScript("https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js").
+		AddScript("https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js").
 		AddStyleSheet("static/main.css").
+		AddStyleSheet("static/prism.css").
 		AddStyleSheet("static/gallery/etc.css").
 		AddLinkWithType("icon", "static/logo.svg", "image/svg+xml")
 
-	page.Body.AddChild(ui.NewElement("h1").SetContent("konstfish/ui Gallery").AddChild(ui.NewElement("img").SetAttribute("src", "static/logo.svg").AddClass("logo").AddClass("icon")))
+	// page.Body.AddChild(ui.NewElement("h1").SetContent("konstfish/ui Gallery").AddChild(ui.NewElement("img").SetAttribute("src", "static/logo.svg").AddClass("logo").AddClass("icon")))
+
+	page.Body.AddChild(kf.Header(kf.TitleLogo("konstfish/ui Gallery", "static/logo.svg"), []kf.KeyValue{{"Source", "https://github.com/konstfish/ui"}, {"Docs", "https://pkg.go.dev/github.com/konstfish/ui/core"}}))
 
 	/*page.Body.AddChild(
 		kf.GroupClass("gallery-header", kf.ButtonIcon("Source", "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg").SetAttribute("onclick", "location.href='http://github.com/konstfish/ui'")),
@@ -60,12 +65,13 @@ func (s *Server) generateHTML() string {
 	componentGroup := ui.NewElement("div").AddClass("gallery-component-group")
 	for _, name := range s.componentOrder {
 		componentGroup.AddChild(
-			ui.NewElement("fieldset").
-				AddClass("panel").
+			ui.NewElement("div").
 				AddClass("gallery-component").
-				AddClass(s.components[name].PanelDimension).
 				SetAttribute("id", fmt.Sprintf("comp-%s", name)).
-				AddChild(kf.Placeholder(fmt.Sprintf("/%s", name))),
+				AddChild(kf.Group().AddClass("flip").AddClass("panel").
+					AddChild(kf.Group(kf.Placeholder(fmt.Sprintf("/%s", name))).AddClass("flip-front")).
+					AddChild(kf.Code("go", s.components[name].FunctionString).AddClass("flip-back")),
+				),
 		)
 	}
 
@@ -132,7 +138,7 @@ func (s *Server) Start() error {
 
 func main() {
 	server := NewServer(":8080")
-	server.RegisterComponent("Text", "d1x1", kf.Text, "Hello, world!")
+	server.RegisterComponent("Text", "kf.Text(\"Hello, world!\")", kf.Text, "Hello, world!")
 	server.RegisterComponent("Link", "d1x1", kf.Link, "Links", "https://github.com/konstfish/ui")
 	server.RegisterComponent("Panel", "d1x1", kf.Panel, kf.Text("Panels"))
 

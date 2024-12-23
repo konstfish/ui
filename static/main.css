@@ -41,6 +41,9 @@
 
     --outer-radius: 1rem;
     --inner-radius: calc(var(--outer-radius) - (var(--padding) + var(--margin)));
+
+    --border-full: 1px solid var(--bg-sec);
+    --box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.07), 0 6px 10px 0 rgba(0, 0, 0, 0.05);
 }
 
 @media (prefers-color-scheme: light) {
@@ -316,9 +319,6 @@ fieldset {
     margin: 1rem;
     padding: 1rem;
     border: 1px solid var(--bg-sec);
-    display: grid;
-    align-items: center;
-    justify-content: center;
     width: 100px;
     height: 100px;
     border-radius: var(--outer-radius);
@@ -359,4 +359,43 @@ legend{
 
 .inner-radius, fieldset > fieldset, .panel > .panel {
     border-radius: var(--inner-radius);
+}
+
+/* components */
+
+.separator-bar {
+    height: 80%;
+    width: 1px;
+    
+    background-color: var(--bg-thr);
+}
+
+/* - header */
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: var(--padding) var(--padding) calc(var(--padding) * 2) var(--padding);
+    margin: 0 0 calc(var(--padding) * 4) 0;
+
+    width: calc(100vw - 2 * var(--padding));
+
+    border-bottom: var(--border-full);
+    box-shadow: var(--box-shadow);
+}
+
+header > .header-text > .icon {
+    height: calc(var(--font-size) * 2);
+    margin-right: var(--margin);
+    margin-bottom: 2px;
+}
+
+header > nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    gap: var(--padding);
 }

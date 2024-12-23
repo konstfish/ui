@@ -1,0 +1,7 @@
+[build]
+
+[watch]
+includes = [
+  "**/*.go",
+  "**/*.css"
+]
