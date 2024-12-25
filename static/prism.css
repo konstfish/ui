@@ -33,7 +33,6 @@ pre[class*="language-"] {
     background: var(--bg-sec);
 }
 
-/* Token colors - keeping it minimal */
 .token.comment,
 .token.prolog,
 .token.doctype,

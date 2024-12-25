@@ -146,7 +146,7 @@ func main() {
 
 	server.RegisterComponent("Button", "kf.GroupClass(\"button-display\",\n  kf.Button(\"Button\"),\n  kf.ButtonDanger(\"Button Danger\"))", kf.GroupClass, "button-display", kf.Button("Button"), kf.ButtonDanger("Button Danger"))
 	server.RegisterComponent("Input", "kf.Input(\"Placeholder\")", kf.Input, "Placeholder")
-	server.RegisterComponent("Dropdown", "kf.Dropdown([]string{\"Option 1\",\n  \"Option 2\",\n  \"Option 3\"})", kf.Dropdown, []string{"Option 1", "Option 2", "Option 3"})
+	server.RegisterComponent("Dropdown", "kf.Dropdown([]string{\n  \"Option 1\",\n  \"Option 2\",\n  \"Option 3\"})", kf.Dropdown, []string{"Option 1", "Option 2", "Option 3"})
 
 	server.RegisterComponent("Spinner", "kf.Spinner(\"Loading...\")", kf.Spinner, "Loading...")
 	server.RegisterComponent("Fieldset", "kf.Fieldset(\n  \"Fieldset\",\n  kf.Text(\"Fieldset Content\"))", kf.Fieldset, "Fieldset", kf.Text("Fieldset Content"))

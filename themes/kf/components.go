@@ -29,7 +29,6 @@ func GroupClass(class string, content ...*ui.Element) *ui.Element {
 func Panel(content *ui.Element) *ui.Element {
 	panel := ui.NewElement("div").
 		AddClass("panel").
-		AddClass("panel-adjust").
 		AddChild(content)
 
 	return panel
