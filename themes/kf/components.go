@@ -6,6 +6,7 @@ import (
 	ui "github.com/konstfish/ui/core"
 )
 
+// Group creates a div element with the given content.
 func Group(content ...*ui.Element) *ui.Element {
 	panel := ui.NewElement("div")
 
@@ -16,6 +17,7 @@ func Group(content ...*ui.Element) *ui.Element {
 	return panel
 }
 
+// GroupClass creates a div element with the given class and content.
 func GroupClass(class string, content ...*ui.Element) *ui.Element {
 	panel := ui.NewElement("div").AddClass(class)
 
@@ -26,6 +28,7 @@ func GroupClass(class string, content ...*ui.Element) *ui.Element {
 	return panel
 }
 
+// Panel creates a div element with the given content & the "panel" class.
 func Panel(content *ui.Element) *ui.Element {
 	panel := ui.NewElement("div").
 		AddClass("panel").
@@ -34,10 +37,12 @@ func Panel(content *ui.Element) *ui.Element {
 	return panel
 }
 
+// Text creates a span element with the given text content.
 func Text(text string) *ui.Element {
 	return ui.NewElement("span").SetContent(text)
 }
 
+// Link creates an anchor element with the given text content and URL.
 func Link(text string, url string) *ui.Element {
 	link := ui.NewElement("a").
 		SetAttribute("href", url).
@@ -46,6 +51,7 @@ func Link(text string, url string) *ui.Element {
 	return link
 }
 
+// Fieldset creates a fieldset element with the given legend and content.
 func Fieldset(legend string, content *ui.Element) *ui.Element {
 	fieldset := ui.NewElement("fieldset").
 		AddClass("panel").
@@ -67,35 +73,7 @@ func TitleLogo(text string, logoSrc string) *ui.Element {
 		AddChild(ui.NewElement("img").SetAttribute("src", logoSrc).AddClass("icon"))
 }
 
-func Header(logo *ui.Element, links []KeyValue) *ui.Element {
-	var headerContent *ui.Element = ui.NewElement("div").AddClass("content").AddChild(logo)
-
-	var linksElement *ui.Element
-	if links != nil {
-		linksElement = ui.NewElement("nav")
-		for _, kv := range links {
-			linksElement.AddChild(Link(kv.Key, kv.Value))
-		}
-
-		headerContent.AddChild(linksElement)
-	}
-
-	return ui.NewElement("header").AddChild(headerContent)
-}
-
-func AppBody() *ui.Element {
-	return ui.NewElement("div").AddId("app")
-}
-
-func FooterSimple(content string) *ui.Element {
-	return ui.NewElement("footer").AddChild(Text(":)"))
-}
-
-func SeparatorBar() *ui.Element {
-	return ui.NewElement("div").AddClass("separator-bar")
-}
-
-/* depends on prism */
+// Code creates a code block with syntax highlighting. This depends on the Prism.js library.
 func Code(lang string, code string) *ui.Element {
 	return ui.NewElement("pre").AddChild(ui.NewElement("code").SetAttribute("class", fmt.Sprintf("language-%s", lang)).SetContent(code))
 }
