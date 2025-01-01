@@ -10,7 +10,7 @@ func VerticalRule() *ui.Element {
 	return ui.NewElement("vr")
 }
 
-func Header(logo *ui.Element, links []KeyValue) *ui.Element {
+func HeaderBar(logo *ui.Element, links []KeyValue) *ui.Element {
 	var headerContent *ui.Element = ui.NewElement("div").AddClass("content").AddChild(logo)
 
 	var linksElement *ui.Element
@@ -27,7 +27,7 @@ func Header(logo *ui.Element, links []KeyValue) *ui.Element {
 }
 
 func AppBody() *ui.Element {
-	return ui.NewElement("div").AddId("app")
+	return ui.NewElement("main").SetId("app")
 }
 
 // FooterSimple creates a footer with text content.

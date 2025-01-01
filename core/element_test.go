@@ -37,6 +37,23 @@ func TestContentInTag(t *testing.T) {
 	}
 }
 
+func TestIdChange(t *testing.T) {
+	el := ui.NewElement("div").
+		SetId("test")
+
+	el.SetId("test2")
+
+	result, err := el.Render()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	expected := `<div id="test2"></div>`
+	if result != expected {
+		t.Errorf("expected %q, got %q", expected, result)
+	}
+}
+
 func TestNestedComponents(t *testing.T) {
 	el := ui.NewElement("div").
 		AddChild(

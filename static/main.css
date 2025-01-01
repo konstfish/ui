@@ -113,12 +113,30 @@ ul {
     margin: 0;
 }
 
+li {
+    margin: var(--margin);
+    list-style-type: none;
+}
+
+ul li span::before {
+    left: -20px;
+    width: 2rem;
+    content: '';
+    border: 1px solid #000;
+    border-top: 0 none transparent;
+    border-right: 0 none transparent;
+}
+
 a {
     color: var(--accent1);
     text-decoration: none;
 
     transition: 0.4s;
 }
+
+/*a:active {
+    background-color: #000;
+}*/
 
 a:hover {
     opacity: 0.9;

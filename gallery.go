@@ -56,7 +56,7 @@ func (s *Server) generateHTML() string {
 		AddStyleSheet("static/gallery/etc.css").
 		AddLinkWithType("icon", "static/logo.svg", "image/svg+xml")
 
-	page.Body.AddChild(kf.Header(kf.TitleLogo("konstfish/ui Gallery", "static/logo.svg"), []kf.KeyValue{{"Source", "https://github.com/konstfish/ui"}, {"Docs", "https://pkg.go.dev/github.com/konstfish/ui/core"}}))
+	page.Body.AddChild(kf.HeaderBar(kf.TitleLogo("konstfish/ui Gallery", "static/logo.svg"), []kf.KeyValue{{"Source", "https://github.com/konstfish/ui"}, {"Docs", "https://pkg.go.dev/github.com/konstfish/ui/core"}}))
 
 	/*page.Body.AddChild(
 		kf.GroupClass("gallery-header", kf.ButtonIcon("Source", "https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg").SetAttribute("onclick", "location.href='http://github.com/konstfish/ui'")),
@@ -151,6 +151,7 @@ func main() {
 	server.RegisterComponent("Spinner", "kf.Spinner(\"Loading...\")", kf.Spinner, "Loading...")
 	server.RegisterComponent("Fieldset", "kf.Fieldset(\n  \"Fieldset\",\n  kf.Text(\"Fieldset Content\"))", kf.Fieldset, "Fieldset", kf.Text("Fieldset Content"))
 
+	server.RegisterComponent("List", "kf.List(TODO)", kf.List, kf.Text("TODO"), kf.Text("TODO"))
 	if err := server.Start(); err != nil {
 		log.Fatal(err)
 	}
