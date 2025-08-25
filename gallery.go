@@ -145,13 +145,13 @@ func main() {
 	server.RegisterComponent("Panel", "kf.Panel(kf.Text(\"Panels\"))", kf.Panel, kf.Text("Panels"))
 
 	server.RegisterComponent("Button", "kf.GroupClass(\"button-display\",\n  kf.Button(\"Button\"),\n  kf.ButtonDanger(\"Button Danger\"))", kf.GroupClass, "button-display", kf.Button("Button"), kf.ButtonDanger("Button Danger"))
-	server.RegisterComponent("Input", "kf.Input(\"Placeholder\")", kf.Input, "Placeholder")
+	server.RegisterComponent("Input", "kf.Input(\"Input Placeholder\")", kf.Input, "Input Placeholder")
 	server.RegisterComponent("Dropdown", "kf.Dropdown([]string{\n  \"Option 1\",\n  \"Option 2\",\n  \"Option 3\"})", kf.Dropdown, []string{"Option 1", "Option 2", "Option 3"})
 
 	server.RegisterComponent("Spinner", "kf.Spinner(\"Loading...\")", kf.Spinner, "Loading...")
 	server.RegisterComponent("Fieldset", "kf.Fieldset(\n  \"Fieldset\",\n  kf.Text(\"Fieldset Content\"))", kf.Fieldset, "Fieldset", kf.Text("Fieldset Content"))
 
-	server.RegisterComponent("List", "kf.List(TODO)", kf.List, kf.Text("TODO"), kf.Text("TODO"))
+	server.RegisterComponent("List", "kf.List(kf.Text(\"Item 1\"), kf.Text(\"Item 2\"))", kf.List, kf.Text("Item 1"), kf.Text("Item 2"))
 	if err := server.Start(); err != nil {
 		log.Fatal(err)
 	}
